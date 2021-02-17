@@ -2,18 +2,6 @@
 scrapes walmart's website to see if item-x is in stock
 """
 
-# from bs4 import BeautifulSoup
-# import requests
-
-# def scrape_page():
-#     """
-#     Scrapes the webpage to see if the item is available online
-#     """
-#     page = requests.get(
-#         "https://www.bestbuy.ca/en-ca/product/playstation-5-console-online-only/14962185"
-#     )
-#     soup = BeautifulSoup(page.content, 'html.parser')
-#     print(soup)
 import json
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
