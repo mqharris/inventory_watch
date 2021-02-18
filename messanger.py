@@ -18,12 +18,11 @@ def send_text(status, print_code, testing_flag=False):
     """
     sends text message to hard coded number(s)
     """
-    name = status["name"]
-    val = status["value"]
+    val = status["offers"]["6000202198563"]["gmAvailability"]
     message_text = ""
     recipients = []
 
-    message_text = "{} : {}".format(name, val)
+    message_text = "{}".format(val)
     if print_code == 0:
         recipients = [mikes_number, mitchs_number]
 
@@ -48,3 +47,16 @@ def send_text(status, print_code, testing_flag=False):
                         )
         print(message.sid)
     return message_text, recipients
+
+
+def error_sender(e):
+    """
+    send me a text if an error is encountered
+    """
+    message = client.messages \
+                .create(
+                    body="error : {}".format(e),
+                    from_=ok_number,
+                    to=mitchs_number
+                )
+    print(message.sid)

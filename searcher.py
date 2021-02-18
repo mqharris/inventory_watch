@@ -3,45 +3,51 @@ scrapes walmart's website to see if item-x is in stock
 """
 
 import json
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+import requests
 
 
 def get_response_from_site():
     """
     loads site and gets response as a string
     """
-    driver = webdriver.Chrome(ChromeDriverManager().install())
-    driver.get(
-        "https://www.walmart.ca/en/ip/playstation5-console/6000202198562")
+    headers = {
+        'authority': 'www.walmart.ca',
+        'accept': 'application/json',
+        'content-type': 'application/json',
+        'user-agent':
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36',
+        'wm_qos.correlation_id':
+        '04db18a4-026-177b19643694ce,04db18a4-026-177b196436940b,04db18a4-026-177b196436940b',
+        'origin': 'https://www.walmart.ca',
+        'sec-fetch-site': 'same-origin',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-dest': 'empty',
+        'referer':
+        'https://www.walmart.ca/en/ip/playstation5-console/6000202198562',
+        'accept-language': 'en-US,en;q=0.9',
+    }
 
-    response = driver.page_source
+    data = '{"fsa":"L5V","products":[{"productId":"6000202198562","skuIds":["6000202198563"]}],"lang":"en","pricingStoreId":"1061","fulfillmentStoreId":"1061","experience":"whiteGM"}'
 
-    driver.quit()
+    response = requests.post(
+        'https://www.walmart.ca/api/product-page/v2/price-offer',
+        headers=headers,
+        data=data)
 
-    return response
-
-
-def parse_resp_for_stock_status(res):
-    """
-    searches resp for the substring saying if item is in stock
-    """
-    idx = res.find('"id":23,"name":"OnlineStatus"')
-    left_trim = res[idx - 1:]
-    right_trim = left_trim[:left_trim.find("}") + 1]
-    status = json.loads(right_trim)
-    return status
+    resp_json = response.content.decode('utf8').replace("'", '"')
+    data = json.loads(resp_json)
+    return data
 
 
-def check_stock_status(stock_status):
+def check_stock_status(site_json):
     """
     checks the scrapped data if the item is in stock
     """
-    status = stock_status["value"]
-    status_name = stock_status["name"]
-    if (status_name == "OnlineStatus") and (status == "In Stock Online"):
+    status = site_json["offers"]["6000202198563"]["gmAvailability"]
+    print(status)
+    if status == "Available":
         print("Item in stock")
-    elif (status_name == "OnlineStatus") and (status == "Out of Stock Online"):
+    elif status == "OutOfStock":
         print("Item not in stock")
         return 1
     else:
@@ -51,5 +57,7 @@ def check_stock_status(stock_status):
 
 
 if __name__ == "__main__":
-    resp = open("test_resp.txt", "r").read()
-    parse_resp_for_stock_status(resp)
+    resp = get_response_from_site()
+    print(resp)
+    stuff = resp["offers"]["6000202198563"]["gmAvailability"]
+    print(stuff)
