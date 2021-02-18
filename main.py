@@ -7,6 +7,7 @@ import searcher
 import messanger
 
 if __name__ == "__main__":
+    heart_beat_counter = 0
     while True:
         try:
             resp = searcher.get_response_from_site()
@@ -18,3 +19,5 @@ if __name__ == "__main__":
         if print_code == 0:
             break
         time.sleep(300)
+        heart_beat_counter += 1
+        print("Lub Dub : {}".format(heart_beat_counter))
