@@ -49,13 +49,13 @@ def send_text(status, print_code, testing_flag=False):
     return message_text, recipients
 
 
-def error_sender(e):
+def error_sender(error):
     """
     send me a text if an error is encountered
     """
     message = client.messages \
                 .create(
-                    body="error : {}".format(e),
+                    body="error : {}".format(error),
                     from_=ok_number,
                     to=mitchs_number
                 )
