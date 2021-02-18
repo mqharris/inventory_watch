@@ -4,8 +4,6 @@ scrapes walmart's website to see if item-x is in stock
 
 import json
 import requests
-# from selenium import webdriver
-# from webdriver_manager.chrome import ChromeDriverManager
 
 
 def get_response_from_site():
