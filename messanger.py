@@ -10,7 +10,7 @@ auth_token = os.environ['TWILIO_AUTH_TOKEN']
 client = Client(account_sid, auth_token)
 
 ok_number = os.environ["OK_NUMBER"]
-mikes_number = os.environ["MIKES_NUMBER"]
+# mikes_number = os.environ["MIKES_NUMBER"]
 mitchs_number = os.environ["MITCHS_NUMBER"]
 
 
@@ -24,7 +24,8 @@ def send_text(status, print_code, testing_flag=False):
 
     message_text = "{}".format(val)
     if print_code == 0:
-        recipients = [mikes_number, mitchs_number]
+        message_text += " Item in stock"
+        recipients = [mitchs_number]
 
     if print_code == 1:
         recipients = []
