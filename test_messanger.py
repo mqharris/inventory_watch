@@ -43,7 +43,7 @@ def test_send_text():
                                                    in_stock_code,
                                                    testing_flag=True)
     assert message_text == "Available THIS IS ONLY A TEST"
-    assert recipients == [messanger.mikes_number, messanger.mitchs_number]
+    assert recipients == [messanger.mitchs_number]
 
     message_text, recipients = messanger.send_text(out_of_stock_mock,
                                                    out_of_stock_code,
